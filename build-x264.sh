@@ -2,7 +2,7 @@
 
 CONFIGURE_FLAGS="--enable-static --enable-pic --disable-cli"
 
-ARCHS="arm64 x86_64 i386 armv7"
+ARCHS="arm64 x86_64 i386 armv7 armv7s"
 
 # directories
 SOURCE="x264"
@@ -59,31 +59,32 @@ then
 		    fi
 		else
 		    PLATFORM="iPhoneOS"
-		    if [ $ARCH = "armv7s" ]
-		    then
-		    	CPU="--cpu=swift"
-		    else
-		    	CPU=
-		    fi
 		    if [ $ARCH = "arm64" ]
 		    then
 		        HOST="--host=aarch64-apple-darwin"
+			XARCH="-arch aarch64"
 		    else
 		        HOST="--host=arm-apple-darwin"
+			XARCH="-arch arm"
 		    fi
-                    CFLAGS="-fembed-bitcode -mios-version-min=7.0"
+                    CFLAGS="$CFLAGS -fembed-bitcode -mios-version-min=7.0"
                     ASFLAGS="$CFLAGS"
 		fi
 
 		XCRUN_SDK=`echo $PLATFORM | tr '[:upper:]' '[:lower:]'`
-		CC="xcrun -sdk $XCRUN_SDK clang -Wno-error=unused-command-line-argument-hard-error-in-future -arch $ARCH"
+		CC="xcrun -sdk $XCRUN_SDK clang"
+		if [ $PLATFORM = "iPhoneOS" ]
+		then
+		    export AS="gas-preprocessor.pl $XARCH -- $CC"
+		else
+		    export -n AS
+		fi
 		CXXFLAGS="$CFLAGS"
 		LDFLAGS="$CFLAGS"
 
 		CC=$CC $CWD/$SOURCE/configure \
 		    $CONFIGURE_FLAGS \
 		    $HOST \
-		    $CPU \
 		    --extra-cflags="$CFLAGS" \
 		    --extra-asflags="$ASFLAGS" \
 		    --extra-ldflags="$LDFLAGS" \
