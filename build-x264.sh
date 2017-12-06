@@ -12,9 +12,6 @@ SCRATCH="scratch-x264"
 # must be an absolute path
 THIN=`pwd`/"thin-x264"
 
-# the one included in x264 does not work; specify full path to working one
-GAS_PREPROCESSOR=/usr/local/bin/gas-preprocessor.pl
-
 COMPILE="y"
 LIPO="y"
 
@@ -75,7 +72,7 @@ then
 		CC="xcrun -sdk $XCRUN_SDK clang"
 		if [ $PLATFORM = "iPhoneOS" ]
 		then
-		    export AS="gas-preprocessor.pl $XARCH -- $CC"
+		    export AS="$CWD/$SOURCE/tools/gas-preprocessor.pl $XARCH -- $CC"
 		else
 		    export -n AS
 		fi
@@ -89,9 +86,6 @@ then
 		    --extra-asflags="$ASFLAGS" \
 		    --extra-ldflags="$LDFLAGS" \
 		    --prefix="$THIN/$ARCH" || exit 1
-
-		mkdir extras
-		ln -s $GAS_PREPROCESSOR extras
 
 		make -j3 install || exit 1
 		cd $CWD
