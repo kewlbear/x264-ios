@@ -4,12 +4,8 @@ This is a shell script to build x264 for iOS apps.
 
 Tested with:
 
-* x264-snapshot-20160814-2245-stable.tar.bz2
-* Xcode 7
-
-## Requirements
-
-* https://github.com/libav/gas-preprocessor
+* x264-snapshot-20160814-2245-stable
+* Xcode 9.2
 
 ## Usage
 
