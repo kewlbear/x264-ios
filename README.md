@@ -1,5 +1,7 @@
 # x264 iOS build script
 
+See https://github.com/kewlbear/FFmpeg-iOS for integration with FFmpeg and more.
+
 This is a shell script to build x264 for iOS apps.
 
 Tested with:
